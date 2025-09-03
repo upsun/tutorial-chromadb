@@ -21,7 +21,16 @@ applications:
     web:
       commands:
         # We add --no-sync to prevent uv from trying to write the uv.lock at runtime 
-        start: "uv run --no-sync chromadb serve --host 0.0.0.0 --port $PORT"
+        start: "uv run --no-sync chroma run --host 0.0.0.0 --port $PORT --path /app/.db"
+
+    mounts:
+      ".db":
+        source: "storage"
+        source_path: "db"
+      ".chroma":
+        source: "storage"
+        source_path: "chroma"
+
     
     # uv cache optimization
     variables:
