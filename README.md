@@ -1,5 +1,7 @@
 # ChromaDB Document Ingestion & Listing Demo
 
+    The full tutorial is available on the [Upsun Devcenter](https://devcenter.upsun.com/posts/store-embeddings-in-chroma-with-persistent-storage-nodejs-and-python-examples/).
+
 A multi-language demonstration of document ingestion and web-based listing using ChromaDB, OpenAI embeddings, and modern web frameworks. This project showcases identical functionality implemented in both Python and Node.js/TypeScript.
 
 ## Architecture
