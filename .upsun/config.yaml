@@ -1,0 +1,85 @@
+applications:
+  chroma:
+    type: "python:3.12"
+
+    source:
+      root: "chroma"
+
+    # Use uv for dependency management
+    dependencies:
+      python3:
+        uv: "*"
+    
+    # uv build process
+    hooks:
+      build: |
+        # Use uv for fast dependency installation
+        uv init
+        uv add chromadb
+        
+    # Web server configuration
+    web:
+      commands:
+        # We add --no-sync to prevent uv from trying to write the uv.lock at runtime 
+        start: "uv run --no-sync chromadb serve --host 0.0.0.0 --port $PORT"
+    
+    # uv cache optimization
+    variables:
+      env:
+        uv_CACHE_DIR: "/tmp/uv-cache"
+        PYTHONPATH: "."
+
+  python-app:
+    source:
+      root: "python-app"
+    
+    type: "python:3.12"
+    
+    # Use uv for dependency management
+    dependencies:
+      python3:
+        uv: "*"
+    
+    # uv build process
+    hooks:
+      build: |
+        # Use uv for fast dependency installation
+        uv sync --frozen
+        
+    # Web server configuration
+    web:
+      commands:
+        # We add --no-sync to prevent uv from trying to write the uv.lock at runtime 
+        start: "uv run --no-sync uvicorn app:app --reload --host 0.0.0.0 --port $PORT"
+    
+    relationships:
+      chroma: chroma:http
+    
+    # uv cache optimization
+    variables:
+      env:
+        uv_CACHE_DIR: "/tmp/uv-cache"
+        PYTHONPATH: "."
+        CHROMA_HOST: chroma.internal
+        CHROMA_PORT: 80
+        CHROMA_SSL: false
+  
+  # nodejs-app:
+  #   source:
+  #     root: "nodejs-app"
+  #   type: nodejs:22
+  #   web:
+  #     commands:
+  #       start: "npm run start -- -p $PORT"
+  #   hooks:
+  #     build: |
+  #       npm install
+  #       npm run build
+
+routes:
+  "https://python.{default}/":
+    type: upstream
+    upstream: "python-app:http"
+  # "https://nodejs.{default}/":
+  #   type: upstream
+  #   upstream: "nodejs-app:http"
