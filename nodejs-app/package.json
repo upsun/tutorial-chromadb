@@ -1,0 +1,30 @@
+{
+  "name": "nodejs-app",
+  "version": "0.1.0",
+  "description": "Node.js TypeScript app for document ingestion and listing",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "ingest": "node dist/ingest.js",
+    "ingest:dev": "tsx src/ingest.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "chromadb": "^1.8.1",
+    "openai": "^4.67.3",
+    "express": "^4.19.2",
+    "glob": "^10.3.10"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "@types/express": "^4.17.21",
+    "typescript": "^5.3.3",
+    "tsx": "^4.6.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

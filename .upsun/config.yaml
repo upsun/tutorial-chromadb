@@ -75,22 +75,35 @@ applications:
         CHROMA_PORT: 80
         CHROMA_SSL: false
   
-  # nodejs-app:
-  #   source:
-  #     root: "nodejs-app"
-  #   type: nodejs:22
-  #   web:
-  #     commands:
-  #       start: "npm run start -- -p $PORT"
-  #   hooks:
-  #     build: |
-  #       npm install
-  #       npm run build
+  nodejs-app:
+    source:
+      root: "nodejs-app"
+    type: nodejs:22
+    
+    web:
+      commands:
+        start: "npm run start"
+    
+    hooks:
+      build: |
+        npm ci
+        npm run build
+      deploy: |
+        npm run ingest
+    
+    relationships:
+      chroma: chroma:http
+    
+    variables:
+      env:
+        CHROMA_HOST: chroma.internal
+        CHROMA_PORT: 80
+        CHROMA_SSL: false
 
 routes:
   "https://python.{default}/":
     type: upstream
     upstream: "python-app:http"
-  # "https://nodejs.{default}/":
-  #   type: upstream
-  #   upstream: "nodejs-app:http"
+  "https://nodejs.{default}/":
+    type: upstream
+    upstream: "nodejs-app:http"
