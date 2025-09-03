@@ -54,6 +54,8 @@ applications:
       build: |
         # Use uv for fast dependency installation
         uv sync --frozen
+      deploy: |
+        uv run --no-sync python ingest.py
         
     # Web server configuration
     web:

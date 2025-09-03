@@ -82,11 +82,15 @@ def ingest_documents(data_dir: str = "data", collection_name: str = "python-app"
     openai_client = OpenAI()  # Expects OPENAI_API_KEY environment variable
     chroma_client = get_chroma_client()
     
-    # Get or create collection
+    # Get or create collection and clear existing data
     try:
         collection = chroma_client.get_collection(name=collection_name)
-        print(f"Using existing collection: {collection_name}")
-    except ValueError:
+        print(f"Found existing collection: {collection_name}")
+        # Clear all existing data
+        collection.delete()
+        print(f"Cleared existing data from collection: {collection_name}")
+    except Exception:
+        # Collection doesn't exist, create it
         collection = chroma_client.create_collection(name=collection_name)
         print(f"Created new collection: {collection_name}")
     
