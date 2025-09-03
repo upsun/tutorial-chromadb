@@ -59,7 +59,7 @@ applications:
     web:
       commands:
         # We add --no-sync to prevent uv from trying to write the uv.lock at runtime 
-        start: "uv run --no-sync uvicorn app:app --reload --host 0.0.0.0 --port $PORT"
+        start: "uv run --no-sync uvicorn main:main --reload --host 0.0.0.0 --port $PORT"
     
     relationships:
       chroma: chroma:http
